@@ -1,13 +1,12 @@
-const rows = 5
-const cols = 5
-const grid = new Array()
+const rows = 3;
+const cols = 3;
+const grid = [];
 
 function Node(x ,y) {
-    this.searched = false;
     this.x = x;
     this.y = y;
+    this.searched = false;
 }
-
 
 const createGrid = () => { 
     for(let i = 0; i < rows; i++) {
@@ -22,8 +21,6 @@ const createGrid = () => {
 
 const findNeighbors = (grid, cord) => {
     let neighbors = [];
-    // const row = 2;
-    // const col = 2;
     
     //Nahoru
     if(cord[0] + 1 < grid.length) {
@@ -45,15 +42,6 @@ const findNeighbors = (grid, cord) => {
         neighbors.push([cord[0], cord[1] + 1])
     }
     
-    // for(let i = 0; i < row; i++) {
-    //     for(let j = 0; j < col; j++) {
-    //         neighbors[i][j] = new Node(i, j);
-      
-    //     };
-    // };
-
-    // console.log(neighbors)
-
     fillNeighbors(neighbors);
 
     return neighbors;
@@ -61,7 +49,6 @@ const findNeighbors = (grid, cord) => {
 
 const fillNeighbors = (neigh) => {
     neigh.forEach((el, idx, arr) => {
-        // console.log(el[0])
         let x = el[0];
         let y = el[1];
         arr[idx] = new Node(x, y);
@@ -69,45 +56,38 @@ const fillNeighbors = (neigh) => {
 };
 
 createGrid()    
-// console.log(grid)
-
-
 
 const start = grid[0][0]
-const end = grid[4][4]
-
+const end = grid[2][2]
+ 
 const BFS = (grid, start) => {
     let queue = []
+    let queueCopy = queue;
     start.searched = true
     queue.push(start)
 
-    // console.log(queue)
 
     while(queue.length > 0) {
         let current = queue.shift();
-        // console.log(current)
-        // console.log(end)
+        visited.push(current);
+
         if(current === end) {
+            console.log(visited)
             console.log("Found");
             break;
-        };
-
-        let neighbors = findNeighbors(grid, [current.y, current.x])
+        } else {
+            let neighbors = findNeighbors(grid, [current.x, current.y])
         
-        // console.log(neighbors)
-
-        neighbors.forEach(el => {
-            // console.log("x: " + el.x)
-            // console.log("y: " + el.y)
-            // console.log(grid[el.x][el.y])
-            let mem = grid[el.x][el.y];
-            if(grid[el.x][el.y].searched === false) {
-                queue.push(mem);
-                // console.log(queue)
-            };
-        });
-    }
+            neighbors.forEach(el => {
+                let mem = grid[el.x][el.y];
+                if(grid[el.x][el.y].searched === false) {
+                    mem.searched = true;
+                    queue.push(mem);
+                };
+            });    
+        }
+    };
         
-}
+};
 
 BFS(grid, start)
